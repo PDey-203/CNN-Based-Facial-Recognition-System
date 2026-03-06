@@ -3,10 +3,10 @@ import tensorflow as tf
 import numpy as np
 import os
 from collections import deque, Counter
-from tensorflow.keras.applications.resnet50 import preprocess_input
+
 
 def start_realtime_emotion_detection(
-    model_path=r"C:\Users\PRITAM\OneDrive\Desktop\FER_Model.keras",
+    model_path=os.path.join(os.path.dirname(__file__), "FER_Model.keras"),
 ):
 
     if not os.path.exists(model_path):
@@ -14,10 +14,19 @@ def start_realtime_emotion_detection(
         return
 
     print("Loading model...")
-    model = tf.keras.models.load_model(model_path, custom_objects={"preprocess_input": preprocess_input})
+    model = tf.keras.models.load_model(model_path)
     print("✅ Model loaded successfully")
 
-    labels = ['angry', 'contempt', 'disgust', 'fear', 'happy', 'neutral', 'sad', 'suprise']
+    labels = [
+        "angry",
+        "contempt",
+        "disgust",
+        "fear",
+        "happy",
+        "neutral",
+        "sad",
+        "suprise",
+    ]
 
     face_cascade = cv2.CascadeClassifier(
         cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
@@ -77,7 +86,7 @@ def start_realtime_emotion_detection(
                     2,
                 )
 
-        cv2.imshow("Emotion Detection (ResNet50)", frame)
+        cv2.imshow("Emotion Detection", frame)
 
         if cv2.waitKey(1) & 0xFF == ord("q"):
             break
